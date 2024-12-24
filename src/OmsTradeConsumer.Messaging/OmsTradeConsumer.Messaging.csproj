@@ -8,11 +8,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+		<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\OmsTradeConsumer.Domain\OmsTradeConsumer.Domain.csproj" />
+	  <ProjectReference Include="..\OmsTradeConsumer.Application\OmsTradeConsumer.Application.csproj" />
+	  <ProjectReference Include="..\OmsTradeConsumer.Domain\OmsTradeConsumer.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

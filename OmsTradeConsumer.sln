@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmsTradeConsumer.Domain", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmsTradeConsumer.Infrastructure", "src\OmsTradeConsumer.Infrastructure\OmsTradeConsumer.Infrastructure.csproj", "{4FD2C35D-3FA7-43F1-8269-DFE5EED6C352}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmsTradeConsumer.Messaging", "OmsTradeConsumer.Messaging\OmsTradeConsumer.Messaging.csproj", "{2D1B5B33-49D2-4AAB-96BB-8251D3E6E554}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmsTradeConsumer.Messaging", "src\OmsTradeConsumer.Messaging\OmsTradeConsumer.Messaging.csproj", "{2D1B5B33-49D2-4AAB-96BB-8251D3E6E554}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
