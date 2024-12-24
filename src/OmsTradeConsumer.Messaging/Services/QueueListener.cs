@@ -11,7 +11,7 @@ using OmsTradeConsumer.Messaging.Configurations;
 
 namespace OmsTradeConsumer.Messaging.Services;
 
-public class QueueListener : IQueueListener
+public class QueueListener : IQueueListener, IDisposable
 {
     private readonly QueueConfiguration _queueConfiguration;
     private readonly ITradeService _tradeService;
@@ -19,6 +19,7 @@ public class QueueListener : IQueueListener
     private readonly ILogger<QueueListener> _logger;
     private readonly IConnection _connection;
     private readonly IModel _channel;
+    private bool _disposed;
 
     public QueueListener(
         QueueConfiguration queueConfiguration,
@@ -96,11 +97,31 @@ public class QueueListener : IQueueListener
         }
     }
 
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _channel?.Close();
+                _connection?.Close();
+                _channel?.Dispose();
+                _connection?.Dispose();
+                _logger.LogInformation("Recursos do QueueListener foram liberados.");
+            }
+
+            _disposed = true;
+        }
+    }
+
     public void Dispose()
     {
-        _channel?.Close();
-        _connection?.Close();
-        _channel?.Dispose();
-        _connection?.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    ~QueueListener()
+    {
+        Dispose(false);
     }
 }
