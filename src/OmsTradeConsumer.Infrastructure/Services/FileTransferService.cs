@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 
-namespace OmsTradeConsumer.Infrastructure.FileTransfer;
+namespace OmsTradeConsumer.Infrastructure.Services;
 
 public class FileTransferService : IFileTransferService
 {

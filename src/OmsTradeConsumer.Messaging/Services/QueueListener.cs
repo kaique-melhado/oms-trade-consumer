@@ -50,7 +50,7 @@ public class QueueListener : IQueueListener, IDisposable
 
             try
             {
-                _logger.LogInformation("Mensagem recebida: {Message}", message);
+                _logger.LogInformation("Mensagem recebida: \n{Message}", message);
 
                 await ProcessMessageAsync(message);
 
@@ -59,7 +59,7 @@ public class QueueListener : IQueueListener, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao processar mensagem: {Message}. Mensagem reenviada para a fila.", message);
+                _logger.LogError(ex, "Erro ao processar mensagem: \n{Message}.\nMensagem reenviada para a fila.", message);
                 _channel.BasicNack(ea.DeliveryTag, false, true); 
             }
         };
@@ -74,25 +74,29 @@ public class QueueListener : IQueueListener, IDisposable
     {
         try
         {
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var trades = JsonSerializer.Deserialize<List<TradeModel>>(message, options);
-
-            if (trades == null || !trades.Any())
+            if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
             {
-                _logger.LogWarning("Mensagem vazia ou inválida: {Message}", message);
+                _logger.LogWarning("Mensagem vazia ou inválida: \n{Message}", message);
                 throw new InvalidOperationException("Mensagem não contém transações válidas.");
             }
 
-            await _tradeService.ProcessTradesAsync(trades);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var trades = JsonSerializer.Deserialize<List<TradeModel>>(message, options);
+
+            _logger.LogInformation("Iniciando processamento de {Count} transações.", trades.Count);
+
+            await Task.WhenAll(trades.Select(trade => _tradeService.ProcessTradeAsync(trade)));
+
+            _logger.LogInformation("Processamento concluído para {Count} transações.", trades.Count);
         }
         catch (JsonException ex)
         {
-            _logger.LogError(ex, "Erro ao desserializar a mensagem: {Message}", message);
+            _logger.LogError(ex, "Erro ao desserializar a mensagem: \n{Message}", message);
             throw;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro inesperado durante o processamento da mensagem: {Message}", message);
+            _logger.LogError(ex, "Erro inesperado durante o processamento da mensagem: \n{Message}", message);
             throw;
         }
     }

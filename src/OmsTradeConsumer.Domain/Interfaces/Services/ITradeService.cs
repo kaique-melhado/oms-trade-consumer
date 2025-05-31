@@ -4,5 +4,5 @@ namespace OmsTradeConsumer.Domain.Interfaces.Services;
 
 public interface ITradeService
 {
-    Task ProcessTradesAsync(List<TradeModel> tradesModel);
+    Task ProcessTradeAsync(TradeModel tradeModel);
 }

@@ -1,7 +1,7 @@
 ﻿using OmsTradeConsumer.Domain.Models;
 using System.Xml.Linq;
 
-namespace OmsTradeConsumer.Application.Factories.Generators.Boletas;
+namespace OmsTradeConsumer.Application.Factories.Generators.Carteiras;
 
 public class RendaVariavelGenerator : IXmlGenerator
 {

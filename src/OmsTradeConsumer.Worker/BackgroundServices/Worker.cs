@@ -49,7 +49,7 @@ public class Worker : BackgroundService
             }
             catch (TaskCanceledException)
             {
-                _logger.LogWarning("Worker cancelado durante o atraso. Interrupção detectada.");
+                _logger.LogWarning("Worker cancelado durante a espera de intervalo. Interrupção detectada.");
                 break;
             }
         }

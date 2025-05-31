@@ -2,6 +2,6 @@
 
 public enum ClientType
 {
-    CotasDeFundo = 1,
-    NaoCotasDeFundo = 3
+    Fundo = 1,
+    Carteira = 3
 }

@@ -3,56 +3,52 @@ using Microsoft.Extensions.Logging;
 using OmsTradeConsumer.Application.Factories;
 using OmsTradeConsumer.Domain.Interfaces.Services;
 using OmsTradeConsumer.Domain.Models;
+using System.Diagnostics;
 
 namespace OmsTradeConsumer.Application.Services;
 
 public class TradeService : ITradeService
 {
     private readonly IFileTransferService _fileTransferService;
-    private readonly ILogger<TradeService> _logger;
     private readonly IValidator<TradeModel> _tradeModelValidator;
+    private readonly ILogger<TradeService> _logger;
 
     public TradeService(IFileTransferService fileTransferService, ILogger<TradeService> logger, IValidator<TradeModel> tradeModelValidator)
     {
         _fileTransferService = fileTransferService ?? throw new ArgumentNullException(nameof(fileTransferService));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _tradeModelValidator = tradeModelValidator ?? throw new ArgumentNullException(nameof(tradeModelValidator));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task ProcessTradesAsync(List<TradeModel> tradesModel)
+    public async Task ProcessTradeAsync(TradeModel tradeModel)
     {
-        if (tradesModel == null || !tradesModel.Any())
+        if (tradeModel == null)
         {
             _logger.LogWarning("Nenhuma transação para processar.");
-            return;
+            throw new InvalidOperationException("Mensagem não contém transações válidas.");
         }
 
-        _logger.LogInformation("Iniciando processamento de {Count} transações.", tradesModel.Count);
-
-        foreach (var trade in tradesModel)
+        try
         {
-            try
-            {
-                ValidateTrade(trade);
+            _logger.LogInformation("Transação TradeBlotterId: {TradeBlotterId} iniciou o processamento.", tradeModel.TradeBlotterId);
 
-                var xmlContent = XmlFactory.CreateXml(trade).ToString();
-                await _fileTransferService.SaveFileAsync(trade, xmlContent);
+            ValidateTrade(tradeModel);
 
-                _logger.LogInformation("Transação TradeBlotterId = {TradeBlotterId} processada com sucesso.", trade.TradeBlotterId);
-            }
-            catch (ValidationException ex)
-            {
-                _logger.LogWarning(ex, "Falha de validação na transação TradeBlotterId = {TradeBlotterId}: {Message}", trade.TradeBlotterId, ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao processar a transação TradeBlotterId = {TradeBlotterId}: {Message}", trade.TradeBlotterId, ex.Message);
-                throw;
-            }
+            var xmlContent = XmlFactory.CreateXml(tradeModel).ToString();
+            await _fileTransferService.SaveFileAsync(tradeModel, xmlContent);
+
+            _logger.LogInformation("Transação TradeBlotterId: {TradeBlotterId} processada com sucesso.", tradeModel.TradeBlotterId);
         }
-
-        _logger.LogInformation("Processamento concluído para {Count} transações.", tradesModel.Count);
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning(ex, "Falha de validação na transação TradeBlotterId: {TradeBlotterId} \n{Message}", tradeModel.TradeBlotterId, ex.Message);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao processar a transação TradeBlotterId: {TradeBlotterId} \n{Message}", tradeModel.TradeBlotterId, ex.Message);
+            throw;
+        }
     }
 
     private void ValidateTrade(TradeModel trade)

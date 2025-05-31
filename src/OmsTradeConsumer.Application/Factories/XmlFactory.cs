@@ -17,15 +17,15 @@ public static class XmlFactory
 
         return (clientType, productType) switch
         {
-            (ClientType.CotasDeFundo, ProductType.RendaFixa) => new Generators.Fundos.RendaFixaGenerator().Generate(tradeModel),
-            (ClientType.CotasDeFundo, ProductType.RendaVariavel) => new Generators.Fundos.RendaVariavelGenerator().Generate(tradeModel),
-            (ClientType.CotasDeFundo, ProductType.CotasFundos) => new Generators.Fundos.CotasFundosGenerator().Generate(tradeModel),
-            (ClientType.CotasDeFundo, ProductType.Derivativos) => new Generators.Fundos.DerivativosGenerator().Generate(tradeModel),
-            (ClientType.NaoCotasDeFundo, ProductType.RendaFixa) => new Generators.Boletas.RendaFixaGenerator().Generate(tradeModel),
-            (ClientType.NaoCotasDeFundo, ProductType.RendaVariavel) => new Generators.Boletas.RendaVariavelGenerator().Generate(tradeModel),
-            (ClientType.NaoCotasDeFundo, ProductType.CotasFundos) => new Generators.Boletas.CotasFundosGenerator().Generate(tradeModel),
-            (ClientType.NaoCotasDeFundo, ProductType.Derivativos) => new Generators.Boletas.DerivativosGenerator().Generate(tradeModel),
-            _ => throw new NotImplementedException("Invalid client or product type")
+            (ClientType.Fundo, ProductType.RendaFixa) => new Generators.Fundos.RendaFixaGenerator().Generate(tradeModel),
+            (ClientType.Fundo, ProductType.RendaVariavel) => new Generators.Fundos.RendaVariavelGenerator().Generate(tradeModel),
+            (ClientType.Fundo, ProductType.CotasFundos) => new Generators.Fundos.CotasFundosGenerator().Generate(tradeModel),
+            (ClientType.Fundo, ProductType.Derivativos) => new Generators.Fundos.DerivativosGenerator().Generate(tradeModel),
+            (ClientType.Carteira, ProductType.RendaFixa) => new Generators.Carteiras.RendaFixaGenerator().Generate(tradeModel),
+            (ClientType.Carteira, ProductType.RendaVariavel) => new Generators.Carteiras.RendaVariavelGenerator().Generate(tradeModel),
+            (ClientType.Carteira, ProductType.CotasFundos) => new Generators.Carteiras.CotasFundosGenerator().Generate(tradeModel),
+            (ClientType.Carteira, ProductType.Derivativos) => new Generators.Carteiras.DerivativosGenerator().Generate(tradeModel),
+            _ => throw new InvalidOperationException("Invalid client or product type")
         };
     }
 }

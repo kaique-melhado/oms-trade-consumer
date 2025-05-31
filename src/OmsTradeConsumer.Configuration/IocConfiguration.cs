@@ -6,7 +6,7 @@ using OmsTradeConsumer.Application.Services;
 using OmsTradeConsumer.Application.Validators;
 using OmsTradeConsumer.Domain.Interfaces.Services;
 using OmsTradeConsumer.Domain.Models;
-using OmsTradeConsumer.Infrastructure.FileTransfer;
+using OmsTradeConsumer.Infrastructure.Services;
 using OmsTradeConsumer.Messaging.Configurations;
 using OmsTradeConsumer.Messaging.Interfaces;
 using OmsTradeConsumer.Messaging.Services;
